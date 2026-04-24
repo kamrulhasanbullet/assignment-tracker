@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { connectDB } from "@/lib/mongoose";
 import Submission from "@/lib/models/Submission";
+import { authOptions } from "@/lib/auth";
 
 export async function PATCH(
   req: NextRequest,
