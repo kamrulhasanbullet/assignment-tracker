@@ -6,13 +6,17 @@ export default withAuth(
     const token = req.nextauth.token;
     const path = req.nextUrl.pathname;
 
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
     // Instructor trying to access student routes
-    if (path.startsWith("/student") && token?.role !== "student") {
+    if (path.startsWith("/student") && token.role !== "student") {
       return NextResponse.redirect(new URL("/instructor/dashboard", req.url));
     }
 
     // Student trying to access instructor routes
-    if (path.startsWith("/instructor") && token?.role !== "instructor") {
+    if (path.startsWith("/instructor") && token.role !== "instructor") {
       return NextResponse.redirect(new URL("/student/assignments", req.url));
     }
 
@@ -20,7 +24,7 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      authorized: () => true, 
     },
   },
 );
