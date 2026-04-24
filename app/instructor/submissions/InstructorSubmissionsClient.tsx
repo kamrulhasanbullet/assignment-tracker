@@ -44,7 +44,7 @@ export default function InstructorSubmissionsClient({
       body: JSON.stringify(editing[id]),
     });
 
-    // ✅ Optimistic update (no refetch)
+    // Optimistic update (no refetch)
     setSubmissions((prev: any[]) =>
       prev.map((s) => (s._id === id ? { ...s, ...editing[id] } : s)),
     );
@@ -60,6 +60,7 @@ export default function InstructorSubmissionsClient({
         studentNote: submission.note,
         assignmentTitle: submission.assignmentId?.title || "Assignment",
         difficulty: submission.assignmentId?.difficulty || "beginner",
+        status: editing[submission._id].status,
       }),
     });
 

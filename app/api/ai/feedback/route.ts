@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import OpenAI from "openai";
 import { authOptions } from "@/lib/auth";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,27 +9,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { studentNote, assignmentTitle, difficulty } = await req.json();
+    const { studentNote, assignmentTitle, difficulty, status } =
+      await req.json();
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are an experienced programming instructor. Generate constructive, encouraging feedback for a student's assignment submission. Be specific, actionable, and supportive. Keep it under 150 words.`,
-        },
-        {
-          role: "user",
-          content: `Assignment: "${assignmentTitle}" (${difficulty} level)
-                    Student's note: "${studentNote}"
+    // Simulate AI processing delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-                    Generate professional feedback for this student.`,
-        },
-      ],
-      max_tokens: 200,
-    });
+    const feedbackMap: Record<string, string> = {
+      accepted: `Great work on "${assignmentTitle}"! Your submission demonstrates a solid understanding of ${difficulty}-level concepts. ${studentNote ? `Your note "${studentNote}" shows thoughtful approach.` : ""} Keep up the excellent work and continue building on these foundations.`,
+      needs_improvement: `Thank you for submitting "${assignmentTitle}". While you've made a start, there are areas that need attention for this ${difficulty}-level task. ${studentNote ? `Regarding your note: "${studentNote}" — please revisit the core requirements.` : ""} Review the assignment guidelines and resubmit with the necessary improvements.`,
+      pending: `Your submission for "${assignmentTitle}" is currently under review. This is a ${difficulty}-level assignment and initial observations look promising. ${studentNote ? `Your note "${studentNote}" has been noted.` : ""} Detailed feedback will follow shortly.`,
+    };
 
-    const feedback = completion.choices[0].message.content;
+    const feedback = feedbackMap[status] ?? feedbackMap["pending"];
     return NextResponse.json({ feedback });
   } catch (error: any) {
     return NextResponse.json(
