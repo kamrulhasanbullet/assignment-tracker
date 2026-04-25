@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { BookOpen } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -68,12 +69,12 @@ export default function LoginPage() {
       <Card className="relative z-10 w-full max-w-105 bg-white/3 border border-white/8 rounded-2xl shadow-[0_32px_80px_rgba(0,0,0,0.6)] backdrop-blur-2xl text-slate-200 gap-0">
         <CardHeader className="p-8 pb-6">
           {/* Brand */}
-          <div className="flex items-center gap-2 mb-8">
-            <span className="text-2xl bg-linear-to-br from-indigo-400 to-violet-500 bg-clip-text text-transparent select-none">
-              ⬡
-            </span>
-            <span className="text-base font-bold tracking-tight text-slate-200">
-              LearnForge
+          <div className="flex items-center gap-2.5 group mb-4">
+            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:shadow-violet-500/40 transition-shadow">
+              <BookOpen className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-white font-semibold text-[15px] tracking-tight">
+              Learn<span className="text-violet-400">Flow</span>
             </span>
           </div>
 
