@@ -6,10 +6,19 @@ import { authOptions } from "@/lib/auth";
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions); 
+
     await connectDB();
-    const assignments = await Assignment.find()
+
+    const filter =
+      session && (session.user as any).role === "instructor"
+        ? { createdBy: (session.user as any).id }
+        : {};
+
+    const assignments = await Assignment.find(filter) 
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
+
     return NextResponse.json(assignments);
   } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
