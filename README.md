@@ -27,4 +27,3 @@ A full-stack web application built with **Next.js 15**, designed to bridge the g
 | Database | MongoDB (Mongoose) |
 | Auth | NextAuth.js (JWT + Credentials) |
 | Charts | Recharts |
-| AI | Anthropic Claude API |
